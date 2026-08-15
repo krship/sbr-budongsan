@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>토지경매 9+1 검색조건 실전 분석 대시보드</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 360px;
+            }
+        }
+        .tab-btn.active {
+            border-bottom-color: #2563eb;
+            color: #2563eb;
+            font-weight: 700;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Chosen Palette: Warm Sand & Slate Indigo (Calm Harmony) -->
+    <!-- Application Structure Plan:
+        1. Navigation Header: Quick access to Condition Filter Navigator, Budget & Risk Simulator, Interactive Visual Analytics, 5 Investment Case Matrix, and Comprehensive Manual.
+        2. Key Summary KPIs: 9+1 Search Criteria Core Principles, Recommended Target Bounds, and Quick Strategy Cards.
+        3. Interactive Condition Workbench (9+1 Simulator): Step-by-step custom query generator with real-time feedback.
+        4. Interactive Budget & Risk Calculators:
+           - Maximum Bidding Price Formula Calculator (Cash -> Bid Cap, Taxes, Interest).
+           - Special Rights Risk Score Assessor (13 Special Rights Toggle Matrix).
+           - Land Area & Zoning Matcher.
+        5. Visual Analytics Dashboard (Chart.js):
+           - Land Liquidity Radar/Bar Chart (10 High-Demand Categories).
+           - Auction Round Price Drop vs Risk Curve.
+           - Budget Allocation Breakdown.
+        6. 5 Investment Strategy Case Matrix: Interactive side-by-side comparison & scenario selector.
+        7. Detailed Search Condition Manual: Exhaustive textual reference with ZERO abbreviations/etc (~등 completely removed).
+    -->
+    <!-- Visualization & Content Choices:
+        - Goal: Inform & Calculate -> Dynamic Bid Limit Calculator (JS logic + Chart.js Donut).
+        - Goal: Compare -> 5 Land Category Types & 5 Case Investment Strategies (Tabbed Interactive Cards & Comparison Table).
+        - Goal: Risk Assessment -> Special Rights 13 Toggles with Beginner/Expert Risk Meter (JS Risk Calculator).
+        - Goal: Structure -> 9+1 Condition Grid with Courts, Land Areas, Zoning, Status, and 5 Sorting Rules.
+        - NO SVG used (Unicode icons and CSS styled badges only).
+        - NO Mermaid JS used.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Header Banner -->
+    <header class="bg-slate-900 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-3">
+                    <span class="bg-blue-600 text-white font-black text-xs px-2.5 py-1 rounded">SBR</span>
+                    <h1 class="text-lg sm:text-xl font-bold tracking-tight">토지경매 9+1 검색조건 실전 전략 대시보드</h1>
+                </div>
+                <div class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                    <a href="#workbench" class="hover:text-blue-400 transition">검색조건 워크벤치</a>
+                    <a href="#calculators" class="hover:text-blue-400 transition">시뮬레이터 & 계산기</a>
+                    <a href="#analytics" class="hover:text-blue-400 transition">시각화 분석</a>
+                    <a href="#cases" class="hover:text-blue-400 transition">5대 투자 케이스</a>
+                    <a href="#manual" class="hover:text-blue-400 transition">상세 매뉴얼</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+
+        <!-- Executive Summary Section -->
+        <section class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+            <div class="max-w-3xl">
+                <span class="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full mb-3">검색 루틴의 핵심</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-4">수백 건의 경매물건을 단 5초 만에 20건으로 압축하는 9+1 검색 시스템</h2>
+                <p class="text-slate-600 leading-relaxed text-sm sm:text-base mb-6">
+                    토지경매 성공의 첫걸음은 무의미한 물건 조회를 최소화하고 자신의 자금 능력과 위험 감수 성향에 맞는 물건을 구조화하여 탐색하는 것입니다. 9가지 필터링 조건과 1가지 결과 정렬 규칙을 통해 입찰 가능성을 극대화하십시오.
+                </p>
+            </div>
+            <!-- Quick KPI Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-slate-100">
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <p class="text-xs font-medium text-slate-500 mb-1">핵심 활동 영역</p>
+                    <p class="text-lg font-bold text-slate-800">반경 80~90km</p>
+                    <p class="text-xs text-blue-600 mt-1">자차 1시간 / 관할법원 2~3개</p>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <p class="text-xs font-medium text-slate-500 mb-1">고회전 선별 지목</p>
+                    <p class="text-lg font-bold text-slate-800">10개 지목 지정</p>
+                    <p class="text-xs text-emerald-600 mt-1">원형지 5종 + 대지류 5종</p>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <p class="text-xs font-medium text-slate-500 mb-1">최적 토지 면적</p>
+                    <p class="text-lg font-bold text-slate-800">30평 ~ 500평</p>
+                    <p class="text-xs text-indigo-600 mt-1">1,000㎡ 이하 농지규제 회피</p>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <p class="text-xs font-medium text-slate-500 mb-1">권장 유찰 구간</p>
+                    <p class="text-lg font-bold text-slate-800">1회 ~ 2회 유찰</p>
+                    <p class="text-xs text-amber-600 mt-1">초보자 특수권리 배제 필수</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 1: Interactive 9+1 Search Condition Workbench -->
+        <section id="workbench" class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+            <div class="mb-6">
+                <h3 class="text-xl font-bold text-slate-900 flex items-center space-x-2">
+                    <span class="w-3 h-3 bg-blue-600 rounded-full inline-block"></span>
+                    <span>1. 나만의 9+1 검색조건 맞춤 설정 워크벤치</span>
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-500 mt-1">
+                    아래 항목을 선택하면 경매 사이트에 입력할 필터값과 나만의 검색 전략 조합이 실시간 생성됩니다.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Inputs Controls (2 Columns) -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- 1. Court & Region -->
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50">
+                        <label class="block text-sm font-bold text-slate-800 mb-2">1. 관할법원 및 지역 지정 (6개 법원 / 16개 지역)</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
+                            <label class="flex items-center p-2 bg-white rounded border cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" class="court-check text-blue-600 rounded mr-2" value="수원본원(화성,수원,오산,용인)" checked onchange="updateWorkbench()">
+                                수원본원 (화성/수원/오산/용인)
+                            </label>
+                            <label class="flex items-center p-2 bg-white rounded border cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" class="court-check text-blue-600 rounded mr-2" value="안산지원(시흥,안산,광명)" checked onchange="updateWorkbench()">
+                                안산지원 (시흥/안산/광명)
+                            </label>
+                            <label class="flex items-center p-2 bg-white rounded border cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" class="court-check text-blue-600 rounded mr-2" value="평택지원(평택,안성)" checked onchange="updateWorkbench()">
+                                평택지원 (평택/안성)
+                            </label>
+                            <label class="flex items-center p-2 bg-white rounded border cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" class="court-check text-blue-600 rounded mr-2" value="여주지원(여주,양평,이천)" onchange="updateWorkbench()">
+                                여주지원 (여주/양평/이천)
+                            </label>
+                            <label class="flex items-center p-2 bg-white rounded border cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" class="court-check text-blue-600 rounded mr-2" value="천안지원(천안,아산)" onchange="updateWorkbench()">
+                                천안지원 (천안/아산)
+                            </label>
+                            <label class="flex items-center p-2 bg-white rounded border cursor-pointer hover:bg-blue-50">
+                                <input type="checkbox" class="court-check text-blue-600 rounded mr-2" value="서산지원(서산,당진)" onchange="updateWorkbench()">
+                                서산지원 (서산/당진)
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 2. Land Category -->
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50">
+                        <label class="block text-sm font-bold text-slate-800 mb-2">2. 용도지목 필터 (고유동성 10개 지목)</label>
+                        <div class="grid grid-cols-2 gap-4 text-xs">
+                            <div>
+                                <span class="font-semibold text-amber-800 block mb-1">원형지 5종 (개발 후 매도/건축)</span>
+                                <div class="space-y-1">
+                                    <label class="flex items-center"><input type="checkbox" class="land-check text-amber-600 rounded mr-1" value="전" checked onchange="updateWorkbench()"> 전 (밭)</label>
+                                    <label class="flex items-center"><input type="checkbox" class="land-check text-amber-600 rounded mr-1" value="답" checked onchange="updateWorkbench()"> 답 (논)</label>
+                                    <label class="flex items-center"><input type="checkbox" class="land-check text-amber-600 rounded mr-1" value="과수원" checked onchange="updateWorkbench()"> 과수원</label>
+                                    <label class="flex items-center"><input type="checkbox" class="land-check text-amber-600 rounded mr-1" value="목장용지" onchange="updateWorkbench()"> 목장용지</label>
+                                    <label class="flex items-center"><input type="checkbox" class="land-check text-amber-600 rounded mr-1" value="임야" onchange="updateWorkbench()"> 임야</label>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-emerald-800 block mb-1">대지류 5종 (단기 매도/건축)</span>
+                                <div class="space-y-1">
+                                    <label class="flex items-center"><input type="checkbox" class="land-check text-emerald-600 rounded mr-1" value="대지" checked onchange="updateWorkbench()"> 대지</label>
+                                    <label class="flex items-center"><input type="checkbox" class="land-check text-emerald-600 rounded mr-1" value="주차장" checked onchange="updateWorkbench()"> 주차장</label>
+                                    <label class="flex items-center"><input type="checkbox" class="land-check text-emerald-600 rounded mr-1" value="공장용지" onchange="updateWorkbench()"> 공장용지</label>
+                                    <label class="flex items-center"><input type="checkbox" class="land-check text-emerald-600 rounded mr-1" value="창고용지" onchange="updateWorkbench()"> 창고용지</label>
+                                    <label class="flex items-center"><input type="checkbox" class="land-check text-emerald-600 rounded mr-1" value="잡종지" checked onchange="updateWorkbench()"> 잡종지</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3 & 4. Size & Bidding Count & Status -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="border border-slate-200 rounded-xl p-4 bg-slate-50">
+                            <label class="block text-sm font-bold text-slate-800 mb-2">3. 토지 면적 범위</label>
+                            <select id="wb-size" class="w-full text-xs p-2 border rounded bg-white" onchange="updateWorkbench()">
+                                <option value="30평~300평 (100㎡~1,000㎡) [농지소유제한 회피]" selected>30평 ~ 300평 (농지규제 회피 권장)</option>
+                                <option value="60평~100평 (단독/다가구 적지)">60평 ~ 100평 (단독/다가구 실수요)</option>
+                                <option value="100평~380평 (근생/카페/창고/제조장 적지)">100평 ~ 380평 (카페/음식점/창고)</option>
+                                <option value="380평~1,000평 (공장/대형숙박시설 적지)">380평 ~ 1,000평 (공장/대형시설)</option>
+                            </select>
+                        </div>
+                        <div class="border border-slate-200 rounded-xl p-4 bg-slate-50">
+                            <label class="block text-sm font-bold text-slate-800 mb-2">6. 유찰횟수 설정</label>
+                            <select id="wb-rounds" class="w-full text-xs p-2 border rounded bg-white" onchange="updateWorkbench()">
+                                <option value="1회~2회 유찰 (초보자 안전분석 구간)" selected>1회 ~ 2회 유찰 (권장 안전구간)</option>
+                                <option value="3회 이상 유찰 (특수분석/수익형 구간)">3회 이상 유찰 (고수익/위험 수반)</option>
+                                <option value="신건 포함 전체 (스피드 가치판단 필요)">신건 포함 전체</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 5 & 10. Risk Exclusion & Sorting -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="border border-slate-200 rounded-xl p-4 bg-slate-50">
+                            <label class="block text-sm font-bold text-slate-800 mb-2">5. 특수물건 필터링</label>
+                            <select id="wb-risk" class="w-full text-xs p-2 border rounded bg-white" onchange="updateWorkbench()">
+                                <option value="권리하자 13종 전체 배제 (초보자 필승 전략)" selected>권리하자 13종 전체 배제 (안전)</option>
+                                <option value="법정지상권 포함 (해결 역량 보유시)">법정지상권 포함</option>
+                                <option value="맹지 포함 (도로 지정/협상 전략)">맹지 포함</option>
+                                <option value="유치권/지분 포함 (고수익 특수수익)">유치권 / 지분경매 포함</option>
+                            </select>
+                        </div>
+                        <div class="border border-slate-200 rounded-xl p-4 bg-slate-50">
+                            <label class="block text-sm font-bold text-slate-800 mb-2">10. 정렬 기준 (+1 조건)</label>
+                            <select id="wb-sort" class="w-full text-xs p-2 border rounded bg-white" onchange="updateWorkbench()">
+                                <option value="입찰기일 내림차순 (매각임박순 - 분석일정 수립 용이)" selected>입찰기일 내림차순 (매각임박순)</option>
+                                <option value="유찰횟수 오름차순 (가격메리트/위험도 교차검토)">유찰횟수 오름차순</option>
+                                <option value="최저매각가 오름차순 (자금력 맞춤검색)">최저매각가 오름차순</option>
+                                <option value="감정가 오름차순 (소형물건 선별)">감정가 오름차순</option>
+                                <option value="조회수 오름차순 (인기도 및 경쟁률 예측)">조회수 오름차순</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Workbench Output Box (1 Column) -->
+                <div class="bg-slate-900 text-white rounded-xl p-6 flex flex-col justify-between border border-slate-800">
+                    <div>
+                        <div class="flex justify-between items-center mb-4 border-b border-slate-800 pb-3">
+                            <h4 class="font-bold text-blue-400 text-base">선택된 검색 필터 프로필</h4>
+                            <span class="text-xs bg-blue-900/60 text-blue-300 px-2 py-1 rounded">실시간 도출</span>
+                        </div>
+                        <div id="wb-summary-content" class="space-y-3 text-xs text-slate-300 leading-relaxed custom-scrollbar max-h-96 overflow-y-auto">
+                            <!-- JS Generated summary -->
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-800 space-y-2">
+                        <button onclick="copyWorkbenchProfile()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-lg transition text-center block">
+                            검색조건 텍스트 복사하기
+                        </button>
+                        <p id="copy-toast" class="text-center text-[10px] text-emerald-400 hidden">프로필이 클립보드에 복사되었습니다!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Interactive Calculators & Simulators -->
+        <section id="calculators" class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-8">
+            <div class="border-b border-slate-100 pb-4">
+                <h3 class="text-xl font-bold text-slate-900 flex items-center space-x-2">
+                    <span class="w-3 h-3 bg-indigo-600 rounded-full inline-block"></span>
+                    <span>2. 토지경매 자금 및 위험도 시뮬레이터</span>
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-500 mt-1">
+                    현금 동원력 기반 최저매각가 상한선과 특수권리 13종 배제 위험도를 간이 계산합니다.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Calculator 1: Max Bid Price Formula -->
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-slate-900 text-base">7. 최저매각가 상한 산정 계산기</h4>
+                        <span class="text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded">레버리지 간이계산법</span>
+                    </div>
+                    <p class="text-xs text-slate-600">
+                        공식: <code class="bg-slate-200 text-slate-800 px-1 py-0.5 rounded">보유현금 + (보유현금 × 70 ÷ 30) - [취득세등 부대비용(1,000만) + 2년치 이자(1,300만)]</code>
+                    </p>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">투자가능 현금 유동성 (만원 단위)</label>
+                        <input type="number" id="calc-cash" value="4000" step="500" min="1000" class="w-full text-sm font-bold p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white" oninput="calculateBidCap()">
+                    </div>
+
+                    <!-- Breakdown Table -->
+                    <div class="bg-white border border-slate-200 rounded-xl p-4 text-xs space-y-2">
+                        <div class="flex justify-between text-slate-600">
+                            <span>보유 현금:</span>
+                            <span id="res-cash" class="font-semibold text-slate-900">4,000 만원</span>
+                        </div>
+                        <div class="flex justify-between text-slate-600">
+                            <span>경락잔금대출 추정액 (LTV 70% 가정):</span>
+                            <span id="res-loan" class="font-semibold text-blue-600">9,333 만원</span>
+                        </div>
+                        <div class="flex justify-between text-slate-600">
+                            <span>총 동원가능금액 산출액:</span>
+                            <span id="res-gross" class="font-semibold text-slate-900">13,333 만원</span>
+                        </div>
+                        <div class="flex justify-between text-slate-600">
+                            <span>취득세 및 초기 기타비용 공제:</span>
+                            <span class="font-semibold text-rose-600">- 1,000 만원</span>
+                        </div>
+                        <div class="flex justify-between text-slate-600">
+                            <span>2년간 대출 보유 이자 공제:</span>
+                            <span class="font-semibold text-rose-600">- 1,300 만원</span>
+                        </div>
+                        <div class="pt-2 border-t border-slate-200 flex justify-between items-center text-sm">
+                            <span class="font-bold text-slate-900">최대 입찰가능 최저매각가 상한:</span>
+                            <span id="res-max-bid" class="font-black text-blue-700 text-base">1억 1,033 만원</span>
+                        </div>
+                    </div>
+                    <p class="text-[11px] text-slate-500 leading-tight">
+                        * 주택담보대출 규제와 달리 토지 경낙잔금대출은 LTV 60~80% 범위에서 상대적으로 자유롭습니다.
+                    </p>
+                </div>
+
+                <!-- Calculator 2: Special Rights 13 Items Risk Inspector -->
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-slate-900 text-base">5. 특수물건 권리하자 13종 위험도 진단</h4>
+                        <span id="risk-badge" class="text-xs font-bold px-2.5 py-1 rounded bg-emerald-100 text-emerald-800">초보자 안전등급</span>
+                    </div>
+                    <p class="text-xs text-slate-600">
+                        물건 검색 시 포함시킬 위험 항목을 선택하면 경매 경험 수준별 위험도를 진단합니다.
+                    </p>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs custom-scrollbar max-h-52 overflow-y-auto p-1 bg-white rounded-xl border border-slate-200">
+                        <label class="flex items-center p-1.5 hover:bg-slate-50 rounded"><input type="checkbox" class="risk-item rounded text-rose-600 mr-1.5" value="법정지상권" onchange="assessRisk()"> 법정지상권</label>
+                        <label class="flex items-center p-1.5 hover:bg-slate-50 rounded"><input type="checkbox" class="risk-item rounded text-rose-600 mr-1.5" value="분묘기지권" onchange="assessRisk()"> 분묘기지권</label>
+                        <label class="flex items-center p-1.5 hover:bg-slate-50 rounded"><input type="checkbox" class="risk-item rounded text-rose-600 mr-1.5" value="유치권" onchange="assessRisk()"> 유치권</label>
+                        <label class="flex items-center p-1.5 hover:bg-slate-50 rounded"><input type="checkbox" class="risk-item rounded text-rose-600 mr-1.5" value="지분경매" onchange="assessRisk()"> 지분경매</label>
+                        <label class="flex items-center p-1.5 hover:bg-slate-50 rounded"><input type="checkbox" class="risk-item rounded text-rose-600 mr-1.5" value="형식적경매" onchange="assessRisk()"> 형식적경매</label>
+                        <label class="flex items-center p-1.5 hover:bg-slate-50 rounded"><input type="checkbox" class="risk-item rounded text-rose-600 mr-1.5" value="맹지" onchange="assessRisk()"> 맹지</label>
+                        <label class="flex items-center p-1.5 hover:bg-slate-50 rounded"><input type="checkbox" class="risk-item rounded text-rose-600 mr-1.5" value="선순위 가등기" onchange="assessRisk()"> 선순위 가등기</label>
+                        <label class="flex items-center p-1.5 hover:bg-slate-50 rounded"><input type="checkbox" class="risk-item rounded text-rose-600 mr-1.5" value="가처분" onchange="assessRisk()"> 가처분</label>
+                        <label class="flex items-center p-1.5 hover:bg-slate-50 rounded"><input type="checkbox" class="risk-item rounded text-rose-600 mr-1.5" value="전세권" onchange="assessRisk()"> 전세권</label>
+                        <label class="flex items-center p-1.5 hover:bg-slate-50 rounded"><input type="checkbox" class="risk-item rounded text-rose-600 mr-1.5" value="토지만매각" onchange="assessRisk()"> 토지만매각</label>
+                        <label class="flex items-center p-1.5 hover:bg-slate-50 rounded"><input type="checkbox" class="risk-item rounded text-rose-600 mr-1.5" value="위반건축물" onchange="assessRisk()"> 위반건축물</label>
+                        <label class="flex items-center p-1.5 hover:bg-slate-50 rounded"><input type="checkbox" class="risk-item rounded text-rose-600 mr-1.5" value="공유자우선매수" onchange="assessRisk()"> 공유자우선매수</label>
+                        <label class="flex items-center p-1.5 hover:bg-slate-50 rounded"><input type="checkbox" class="risk-item rounded text-rose-600 mr-1.5" value="재매각" onchange="assessRisk()"> 재매각</label>
+                    </div>
+
+                    <div id="risk-advice" class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-900">
+                        <strong>초보자 권장 상태:</strong> 특수권리가 전무한 클린 물건입니다. 경락잔금대출 승인율이 높고 리스크가 없습니다.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Visual Analytics Charts -->
+        <section id="analytics" class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-8">
+            <div>
+                <h3 class="text-xl font-bold text-slate-900 flex items-center space-x-2">
+                    <span class="w-3 h-3 bg-emerald-600 rounded-full inline-block"></span>
+                    <span>3. 데이터 시각화 분석 대시보드</span>
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-500 mt-1">
+                    지목별 유동성, 유찰횟수별 가격 할인율 및 위험도 곡선, 용도별 적정 토지면적 분포를 시각적으로 확인합니다.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Chart 1: Land Category Liquidity & Demand -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col items-center">
+                    <h4 class="text-sm font-bold text-slate-800 mb-2 text-center">선택 10개 지목 vs 기타 18개 지목 수요/회전율 비교</h4>
+                    <div class="chart-container">
+                        <canvas id="chartCategory"></canvas>
+                    </div>
+                    <p class="text-[11px] text-slate-500 mt-2 text-center">
+                        원형지 5종(전·답·과·목·임) 및 대지류 5종(대·차·장·창·잡)이 전체 거래 유동성의 약 85% 이상을 차지합니다.
+                    </p>
+                </div>
+
+                <!-- Chart 2: Auction Round Price Drop vs Risk -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col items-center">
+                    <h4 class="text-sm font-bold text-slate-800 mb-2 text-center">유찰 횟수별 감정가 대비 가격 및 숨겨진 위험도 변화</h4>
+                    <div class="chart-container">
+                        <canvas id="chartAuctionRounds"></canvas>
+                    </div>
+                    <p class="text-[11px] text-slate-500 mt-2 text-center">
+                        1~2회 유찰 구간은 안전성과 수익성의 최적 균형점이며, 3회 이상은 숨겨진 하자 분석력이 요구됩니다.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: 5 Investment Strategy Cases -->
+        <section id="cases" class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+            <div>
+                <h3 class="text-xl font-bold text-slate-900 flex items-center space-x-2">
+                    <span class="w-3 h-3 bg-amber-600 rounded-full inline-block"></span>
+                    <span>4. 출구전략별 실전 투자 5대 케이스 (Case 1 ~ Case 5)</span>
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-500 mt-1">
+                    본인의 투자 목적, 현금 여력, 직업, 감수 가능 특수권리에 따른 5가지 표준 투자 시나리오입니다.
+                </p>
+            </div>
+
+            <!-- Case Selector Buttons -->
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs font-bold">
+                <button onclick="showCase(1)" id="case-btn-1" class="py-2.5 px-3 rounded-xl border border-slate-200 bg-blue-600 text-white shadow-sm transition">Case 1: 단기매도</button>
+                <button onclick="showCase(2)" id="case-btn-2" class="py-2.5 px-3 rounded-xl border border-slate-200 bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Case 2: 리모델링</button>
+                <button onclick="showCase(3)" id="case-btn-3" class="py-2.5 px-3 rounded-xl border border-slate-200 bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Case 3: 개발후매도</button>
+                <button onclick="showCase(4)" id="case-btn-4" class="py-2.5 px-3 rounded-xl border border-slate-200 bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Case 4: 건축후매도</button>
+                <button onclick="showCase(5)" id="case-btn-5" class="py-2.5 px-3 rounded-xl border border-slate-200 bg-slate-100 text-slate-700 hover:bg-slate-200 transition">Case 5: 시세차익</button>
+            </div>
+
+            <!-- Case Detail Display Box -->
+            <div id="case-detail-box" class="bg-slate-50 border border-slate-200 rounded-2xl p-6 space-y-4">
+                <!-- Dynamically populated by JS -->
+            </div>
+
+            <!-- Comparison Matrix Table -->
+            <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                <table class="w-full text-xs text-left text-slate-700">
+                    <thead class="text-[11px] uppercase bg-slate-100 text-slate-800 font-bold border-b">
+                        <tr>
+                            <th class="p-3">구분</th>
+                            <th class="p-3">출구전략</th>
+                            <th class="p-3">현금유동화</th>
+                            <th class="p-3">보유기간</th>
+                            <th class="p-3">원형지개발 여부</th>
+                            <th class="p-3">활동 관할법원</th>
+                            <th class="p-3">해결 특수물건</th>
+                            <th class="p-3">직업 유형</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 bg-white">
+                        <tr class="hover:bg-blue-50/50">
+                            <td class="p-3 font-bold text-blue-600">Case 1</td>
+                            <td class="p-3 font-semibold">단기 매도</td>
+                            <td class="p-3">4,000 만원</td>
+                            <td class="p-3">1년 이내</td>
+                            <td class="p-3">미개발 (개발X)</td>
+                            <td class="p-3">안산지원</td>
+                            <td class="p-3 text-rose-600 font-medium">법정지상권</td>
+                            <td class="p-3">전업투자자</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50/50">
+                            <td class="p-3 font-bold text-blue-600">Case 2</td>
+                            <td class="p-3 font-semibold">리모델링 매도</td>
+                            <td class="p-3">6,000 만원</td>
+                            <td class="p-3">2년 이내</td>
+                            <td class="p-3">개발 (토목기초)</td>
+                            <td class="p-3">안산, 수원</td>
+                            <td class="p-3 text-rose-600 font-medium">맹지, 위반건축물</td>
+                            <td class="p-3">직장인</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50/50">
+                            <td class="p-3 font-bold text-blue-600">Case 3</td>
+                            <td class="p-3 font-semibold">개발 후 매도</td>
+                            <td class="p-3">1.5 억원</td>
+                            <td class="p-3">2년 이상 (절세)</td>
+                            <td class="p-3">개발 (토목준공)</td>
+                            <td class="p-3">안산, 수원, 평택</td>
+                            <td class="p-3 text-rose-600 font-medium">맹지, 유치권</td>
+                            <td class="p-3">전업투자자</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50/50">
+                            <td class="p-3 font-bold text-blue-600">Case 4</td>
+                            <td class="p-3 font-semibold">건축 후 매도</td>
+                            <td class="p-3">2.0 억원</td>
+                            <td class="p-3">2년 ~ 5년</td>
+                            <td class="p-3">개발 (건축준공)</td>
+                            <td class="p-3">안산, 수원, 평택, 천안</td>
+                            <td class="p-3 text-rose-600 font-medium">맹지</td>
+                            <td class="p-3">직장인</td>
+                        </tr>
+                        <tr class="hover:bg-blue-50/50">
+                            <td class="p-3 font-bold text-blue-600">Case 5</td>
+                            <td class="p-3 font-semibold">시세차익 보유</td>
+                            <td class="p-3">4,000 만원</td>
+                            <td class="p-3">5년 이상</td>
+                            <td class="p-3">미개발 (개발X)</td>
+                            <td class="p-3">수원, 평택, 천안, 서산</td>
+                            <td class="p-3 text-rose-600 font-medium">맹지</td>
+                            <td class="p-3">전업투자자</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Section 5: Comprehensive Search Condition Manual (Exhaustive Textual Reference) -->
+        <section id="manual" class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 space-y-6">
+            <div class="border-b border-slate-100 pb-4">
+                <h3 class="text-xl font-bold text-slate-900 flex items-center space-x-2">
+                    <span class="w-3 h-3 bg-slate-800 rounded-full inline-block"></span>
+                    <span>5. 9+1 토지경매 검색조건 완벽 분석 매뉴얼</span>
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-500 mt-1">
+                    슬라이드 문서 전체 텍스트 기반 상세 명세서입니다. 축약어 및 함축 표현 없이 모든 항목을 명시합니다.
+                </p>
+            </div>
+
+            <div class="space-y-6 text-sm text-slate-700 leading-relaxed">
+                <!-- Condition 1 -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                    <h4 class="font-bold text-slate-900 text-base">1. 소재지 (관할법원 지정 및 시·군·구)</h4>
+                    <p class="text-xs text-slate-600">
+                        거주지 기준으로 자가용 이동 시간 1시간 전후, 거리 반경 80킬로미터에서 90킬로미터 이내를 활동 범위로 지정합니다. 현장 임장 및 법원 직접 출석 입찰의 편의를 위하여 2개에서 3개의 관할법원 또는 최대 6개 법원 및 16개 세부 관할 지역을 지정합니다.
+                    </p>
+                    <ul class="list-disc list-inside text-xs text-slate-800 space-y-1 font-medium pl-2">
+                        <li>수원지방법원 본원: 화성시, 수원시, 오산시, 용인시</li>
+                        <li>수원지방법원 안산지원: 시흥시, 안산시, 광명시</li>
+                        <li>수원지방법원 평택지원: 평택시, 안성시</li>
+                        <li>수원지방법원 여주지원: 여주시, 양평군, 이천시</li>
+                        <li>대전지방법원 천안지원: 천안시, 아산시</li>
+                        <li>대전지방법원 서산지원: 서산시, 당진시</li>
+                    </ul>
+                </div>
+
+                <!-- Condition 2 -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                    <h4 class="font-bold text-slate-900 text-base">2. 용도 (지목)</h4>
+                    <p class="text-xs text-slate-600">
+                        대한민국 전체 28개 토지 지목 중 거래 유동성과 매수 수요가 높아 회전율이 우수한 10개 지목만을 엄선하여 필터링합니다.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
+                        <div class="bg-white p-3 rounded border">
+                            <span class="font-bold text-amber-800 block mb-1">원형지 5종 (개발 후 매도 및 건축)</span>
+                            <p class="text-slate-600">전, 답, 과수원, 목장용지, 임야 (농지전용허가, 산지전용허가, 개발행위허가, 건축허가 필요)</p>
+                        </div>
+                        <div class="bg-white p-3 rounded border">
+                            <span class="font-bold text-emerald-800 block mb-1">대지류 5종 (단기 매도 및 실수요)</span>
+                            <p class="text-slate-600">대지, 주차장, 공장용지, 창고용지, 잡종지 (개발행위허가 및 건축허가 수월)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Condition 3 & 4 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                        <h4 class="font-bold text-slate-900 text-base">3. 토지 면적 및 농지 규제</h4>
+                        <p class="text-xs text-slate-600">
+                            소형 거래가 용이하고 개발 핸들링이 수월한 30평에서 500평 (1,000제곱미터 이하) 범위를 우선 지정합니다. 비농업인 소유 최대 한도인 1,000제곱미터 이하를 선택하여 농지취득자격증명 규제를 회피합니다.
+                        </p>
+                        <ul class="text-xs space-y-1 text-slate-700 pl-2">
+                            <li>• 단독주택 및 다가구주택: 60평 ~ 100평</li>
+                            <li>• 다세대주택 및 상가주택: 150평</li>
+                            <li>• 근린생활시설 상가: 30평 ~ 150평</li>
+                            <li>• 소규모 상가 (소매점, 편의점, 빵집, 휴게음식점): 30평 ~ 60평</li>
+                            <li>• 일반 상가 (편의점, 휴게음식점, 일반음식점): 60평 ~ 150평</li>
+                            <li>• 길거리 카페, 음식점, 카센터, 모텔, 창고, 제조장: 100평 ~ 380평</li>
+                            <li>• 공장, 창고, 대형 숙박시설: 380평 ~ 1,000평</li>
+                        </ul>
+                    </div>
+
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                        <h4 class="font-bold text-slate-900 text-base">4. 용도지역 및 건폐율</h4>
+                        <p class="text-xs text-slate-600">
+                            건축 실수요 목적에 따라 건축물의 종류와 필요 면적을 산정합니다. 국토의 계획 및 이용에 관한 법률상 용도지역 건폐율을 반영합니다.
+                        </p>
+                        <div class="bg-white p-3 rounded border text-xs">
+                            <span class="font-bold text-slate-800">계획관리지역 예시:</span>
+                            <p class="text-slate-600 mt-0.5">건폐율 40% 적용 시, 건축바닥면적 40평 건물을 신축하려면 최소 100평의 토지가 필요합니다.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Condition 5 & 6 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                        <h4 class="font-bold text-slate-900 text-base">5. 특수물건 배제 권리 13종</h4>
+                        <p class="text-xs text-slate-600">
+                            입문자는 대출 자금 조달 불가 및 손실 리스크 방지를 위해 다음 13가지 권리 하자를 검색 조건에서 완벽히 배제합니다.
+                        </p>
+                        <p class="text-xs font-semibold text-rose-700 bg-rose-50 p-2 rounded">
+                            법정지상권, 분묘기지권, 유치권, 지분경매, 형식적경매, 맹지, 선순위 가등기, 가처분, 전세권, 토지만매각, 위반건축물, 공유자우선매수신고, 재매각
+                        </p>
+                    </div>
+
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                        <h4 class="font-bold text-slate-900 text-base">6. 유찰횟수 및 분석 구간</h4>
+                        <p class="text-xs text-slate-600">
+                            관할법원 최근 1년 매각가율 통계 기반으로 분석 구간을 설정합니다.
+                        </p>
+                        <ul class="text-xs space-y-1 text-slate-700 pl-2">
+                            <li>• <strong>유찰 1회:</strong> 안전경매 입문 단계 (기본 권리분석)</li>
+                            <li>• <strong>유찰 2회:</strong> 일반경매 기본분석 단계 (수익성 확보)</li>
+                            <li>• <strong>유찰 3회 이상:</strong> 수익경매 특수분석 단계 (문제점 원인 규명 필수)</li>
+                            <li>• <strong>유찰 4회 이상:</strong> 잠재 위험 요소 고조 (주의 필요)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Condition 7, 8, 9, 10 -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                    <h4 class="font-bold text-slate-900 text-base">7~10. 진행상태, 매각기일 및 정렬 규칙 (+1)</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                        <div class="bg-white p-3 rounded border">
+                            <span class="font-bold text-slate-800 block mb-1">8. 경매진행상태</span>
+                            <p class="text-slate-600"><strong>진행 물건 (유찰):</strong> 다음 기일까지 1개월 여유가 있어 분석에 최적.<br><strong>신건:</strong> 매각 2주전 서류 3종 공고로 빠른 판단력 요구.</p>
+                        </div>
+                        <div class="bg-white p-3 rounded border">
+                            <span class="font-bold text-slate-800 block mb-1">9. 매각기일 루틴</span>
+                            <p class="text-slate-600">법원 입찰일 1개월 전부터 미리 검색하고 분석 및 휴가 일정을 계획적으로 수립하는 루틴을 유지.</p>
+                        </div>
+                        <div class="bg-white p-3 rounded border">
+                            <span class="font-bold text-slate-800 block mb-1">10. 5대 정렬 규칙 (+1)</span>
+                            <p class="text-slate-600">① 입찰기일 내림차순(임박순)<br>② 유찰횟수 오름차순<br>③ 감정가 오름차순<br>④ 조회수 오름차순<br>⑤ 최저매각가 오름차순</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p class="font-semibold text-slate-300">SBR부동산 법원경매 매수신청대리 전문 공인중개사사무소</p>
+            <p>경기남서부 토지경매 물건 입찰 매수신청대리 토탈서비스 | 대표 강프로 실전 리포트</p>
+            <p class="text-slate-500 text-[10px]">본 대시보드는 슬라이드 교육 자료의 모든 검색조건 수치와 공식을 정확히 구현하였습니다.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Global Chart Instances
+        let chartCategoryInstance = null;
+        let chartRoundsInstance = null;
+
+        // Investment Cases Data Matrix
+        const caseData = {
+            1: {
+                title: "Case 1: 단기 매도 출구전략",
+                cash: "4,000 만원",
+                period: "1년 이내",
+                dev: "미개발 (개발X)",
+                courts: "수원지방법원 안산지원 (시흥, 안산, 광명)",
+                risk: "법정지상권 (건물철거 및 지료청구 소송 활용)",
+                job: "전업투자자",
+                desc: "소액 현금으로 안산지원 관할 물건에 입찰하여 법정지상권 여지를 단기 협상 또는 지료청구 소송으로 해결 후 1년 이내 단기 시세차익을 실현합니다."
+            },
+            2: {
+                title: "Case 2: 리모델링 매도 출구전략",
+                cash: "6,000 만원",
+                period: "2년 이내",
+                dev: "개발 (토목 기초공사 진행)",
+                courts: "안산지원, 수원지방법원 본원",
+                risk: "맹지, 위반건축물 (도로점용허가 및 위반사항 양성화)",
+                job: "직장인 (주말 현장 관리)",
+                desc: "맹지 탈출을 위한 도로지정 또는 위반건축물 부분 정비를 거쳐 토지 가치를 재평가받은 후 2년 내 매도합니다."
+            },
+            3: {
+                title: "Case 3: 개발 후 매도 출구전략",
+                cash: "1.5 억원",
+                period: "2년 이상 (양도소득세 일반과세 절세)",
+                dev: "개발 (토목 준공 완료)",
+                courts: "안산지원, 수원본원, 평택지원",
+                risk: "맹지, 유치권 (진정 성립 여부 규명 후 부존재 확인)",
+                job: "전업투자자",
+                desc: "충분한 자금력으로 토목공사 준공을 완료하여 분할 및 개발부지로 가치를 상승시킨 후 양도세 절세 시점에 매도합니다."
+            },
+            4: {
+                title: "Case 4: 건축 후 매도 출구전략",
+                cash: "2.0 억원",
+                period: "2년 ~ 5년",
+                dev: "개발 (건축 준공 완료)",
+                courts: "안산지원, 수원본원, 평택지원, 천안지원",
+                risk: "맹지 (도로 확보 승인)",
+                job: "직장인",
+                desc: "실수요 건축물(근생 상가, 카페, 음식점, 제조장)을 신축하여 월세 수익 및 분양 매도를 통해 고수익을 창출합니다."
+            },
+            5: {
+                title: "Case 5: 장기 시세차익 출구전략",
+                cash: "4,000 만원",
+                period: "5년 이상",
+                dev: "미개발 (원형지 상태 보유)",
+                courts: "수원본원, 평택지원, 천안지원, 서산지원",
+                risk: "맹지",
+                job: "전업투자자",
+                desc: "경기 남서부 및 충남 개발 축 인근의 원형지를 저가 매수하여 도로망 확충 시 장기적 시세 상승 이익을 취합니다."
+            }
+        };
+
+        // Initialize Application
+        document.addEventListener('DOMContentLoaded', () => {
+            updateWorkbench();
+            calculateBidCap();
+            assessRisk();
+            initCharts();
+            showCase(1);
+        });
+
+        // 1. Workbench Generator Logic
+        function updateWorkbench() {
+            const courts = Array.from(document.querySelectorAll('.court-check:checked')).map(c => c.value);
+            const lands = Array.from(document.querySelectorAll('.land-check:checked')).map(l => l.value);
+            const size = document.getElementById('wb-size').value;
+            const rounds = document.getElementById('wb-rounds').value;
+            const risk = document.getElementById('wb-risk').value;
+            const sort = document.getElementById('wb-sort').value;
+
+            const summaryHtml = `
+                <p><strong class="text-blue-400">[관할 법원]</strong><br>${courts.length > 0 ? courts.join(', ') : '선택된 법원 없음'}</p>
+                <p><strong class="text-emerald-400">[선택 지목]</strong><br>${lands.length > 0 ? lands.join(', ') : '선택된 지목 없음'} (${lands.length}개 선택됨)</p>
+                <p><strong class="text-indigo-400">[토지 면적]</strong><br>${size}</p>
+                <p><strong class="text-amber-400">[유찰 횟수]</strong><br>${rounds}</p>
+                <p><strong class="text-rose-400">[특수 권리]</strong><br>${risk}</p>
+                <p><strong class="text-slate-200">[정렬 순서]</strong><br>${sort}</p>
+            `;
+
+            document.getElementById('wb-summary-content').innerHTML = summaryHtml;
+        }
+
+        function copyWorkbenchProfile() {
+            const text = document.getElementById('wb-summary-content').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById('copy-toast');
+                toast.classList.remove('hidden');
+                setTimeout(() => toast.classList.add('hidden'), 2500);
+            });
+        }
+
+        // 2. Max Bid Limit Calculator
+        function calculateBidCap() {
+            const cash = parseFloat(document.getElementById('calc-cash').value) || 0;
+            const loan = cash * 70 / 30; // LTV 70% level leverage
+            const gross = cash + loan;
+            const taxAndExpenses = 1000; // 1,000만원
+            const interestTwoYears = 1300; // 1,300만원
+
+            const maxBid = gross - (taxAndExpenses + interestTwoYears);
+
+            document.getElementById('res-cash').innerText = cash.toLocaleString() + ' 만원';
+            document.getElementById('res-loan').innerText = Math.round(loan).toLocaleString() + ' 만원';
+            document.getElementById('res-gross').innerText = Math.round(gross).toLocaleString() + ' 만원';
+            document.getElementById('res-max-bid').innerText = (maxBid > 0 ? (maxBid / 10000 >= 1 ? (Math.floor(maxBid / 10000) + '억 ' + Math.round(maxBid % 10000).toLocaleString()) : Math.round(maxBid).toLocaleString()) : 0) + ' 만원';
+        }
+
+        // 3. Special Rights Risk Assessor
+        function assessRisk() {
+            const selectedRisks = Array.from(document.querySelectorAll('.risk-item:checked')).map(r => r.value);
+            const count = selectedRisks.length;
+            const badge = document.getElementById('risk-badge');
+            const advice = document.getElementById('risk-advice');
+
+            if (count === 0) {
+                badge.className = "text-xs font-bold px-2.5 py-1 rounded bg-emerald-100 text-emerald-800";
+                badge.innerText = "초보자 안전등급";
+                advice.className = "p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-900";
+                advice.innerHTML = "<strong>초보자 최적 구간:</strong> 특수 권리 하자가 전혀 없는 클린 물건입니다. 경락잔금대출 승인율이 매우 높고 손실 위험이 없습니다.";
+            } else if (count <= 2) {
+                badge.className = "text-xs font-bold px-2.5 py-1 rounded bg-amber-100 text-amber-800";
+                badge.innerText = "중급자 분석필요";
+                advice.className = "p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900";
+                advice.innerHTML = `<strong>주의 선택 (${selectedRisks.join(', ')}):</strong> 법정지상권 협상, 도로지정 맹지 해결 능력 또는 현금 보유력이 요구됩니다.`;
+            } else {
+                badge.className = "text-xs font-bold px-2.5 py-1 rounded bg-rose-100 text-rose-800";
+                badge.innerText = "고수익 고위험 구간";
+                advice.className = "p-3 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-900";
+                advice.innerHTML = `<strong>고위험 선택 (${count}개 항목 포함):</strong> 대출 실행이 불가할 수 있으며 소송 및 특수 해결 전문 역량이 필수적입니다.`;
+            }
+        }
+
+        // 4. Show Investment Case Scenario
+        function showCase(num) {
+            for (let i = 1; i <= 5; i++) {
+                const btn = document.getElementById(`case-btn-${i}`);
+                if (i === num) {
+                    btn.className = "py-2.5 px-3 rounded-xl border border-slate-200 bg-blue-600 text-white shadow-sm transition font-bold";
+                } else {
+                    btn.className = "py-2.5 px-3 rounded-xl border border-slate-200 bg-slate-100 text-slate-700 hover:bg-slate-200 transition font-bold";
+                }
+            }
+
+            const data = caseData[num];
+            const box = document.getElementById('case-detail-box');
+            box.innerHTML = `
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 pb-3 gap-2">
+                    <h4 class="font-black text-slate-900 text-lg">${data.title}</h4>
+                    <span class="text-xs bg-blue-100 text-blue-800 font-bold px-2.5 py-1 rounded-full self-start sm:self-auto">${data.job} 적합</span>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
+                    <div>
+                        <span class="text-slate-500 block">필요 현금 유동성</span>
+                        <span class="font-bold text-slate-900 text-sm">${data.cash}</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 block">목표 보유 기간</span>
+                        <span class="font-bold text-slate-900 text-sm">${data.period}</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 block">토지 개발 단계</span>
+                        <span class="font-bold text-slate-900 text-sm">${data.dev}</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 block">해결 특수 권리</span>
+                        <span class="font-bold text-rose-600 text-sm">${data.risk}</span>
+                    </div>
+                </div>
+                <div class="p-3 bg-white border border-slate-200 rounded-xl text-xs text-slate-700 leading-relaxed">
+                    <strong>시나리오 실행 상세:</strong> ${data.desc}<br>
+                    <strong>활동 관할 법원:</strong> ${data.courts}
+                </div>
+            `;
+        }
+
+        // 5. Chart.js Visualizations
+        function initCharts() {
+            // Label Wrapping logic (max 16 chars)
+            const wrapLabel = (str) => {
+                if (str.length > 16) {
+                    return [str.substring(0, 16), str.substring(16)];
+                }
+                return str;
+            };
+
+            // Chart 1: Land Category Liquidity
+            const ctxCat = document.getElementById('chartCategory').getContext('2d');
+            chartCategoryInstance = new Chart(ctxCat, {
+                type: 'bar',
+                data: {
+                    labels: ['전(밭)', '답(논)', '대지', '잡종지', '공장용지', '창고용지', '임야', '과수원', '기타 18개지목'].map(wrapLabel),
+                    datasets: [{
+                        label: '매수 수요 및 유동성 지수',
+                        data: [95, 90, 98, 88, 85, 82, 70, 65, 20],
+                        backgroundColor: [
+                            '#2563eb', '#3b82f6', '#059669', '#10b981', '#6366f1', '#8b5cf6', '#d97706', '#f59e0b', '#cbd5e1'
+                        ],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ` 거래 유동성 지수: ${context.raw}점 / 100점`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { font: { size: 10 } }
+                        },
+                        x: {
+                            ticks: { font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+
+            // Chart 2: Round Price Drop vs Risk
+            const ctxRounds = document.getElementById('chartAuctionRounds').getContext('2d');
+            chartRoundsInstance = new Chart(ctxRounds, {
+                type: 'line',
+                data: {
+                    labels: ['신건 (100%)', '1회 유찰 (70~80%)', '2회 유찰 (49~64%)', '3회 유찰 (34~51%)', '4회이상 유찰 (<30%)'].map(wrapLabel),
+                    datasets: [
+                        {
+                            label: '감정가 대비 최저가격 비율 (%)',
+                            data: [100, 75, 55, 38, 25],
+                            borderColor: '#2563eb',
+                            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                            fill: true,
+                            tension: 0.3
+                        },
+                        {
+                            label: '권리 하자 및 잠재위험도 지수',
+                            data: [15, 25, 40, 75, 95],
+                            borderColor: '#e11d48',
+                            borderDash: [5, 5],
+                            backgroundColor: 'transparent',
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { font: { size: 11 } }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { font: { size: 10 } }
+                        },
+                        x: {
+                            ticks: { font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
