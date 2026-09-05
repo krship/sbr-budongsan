@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SBR부동산 매수신청대리 사전안내</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Pretendard', 'sans-serif'], },
+                    colors: {
+                        customDark: '#1a1f35', 
+                        customIndigo: '#4f46e5',
+                        customHighlight: '#3730a3',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { 
+            font-family: 'Pretendard', sans-serif; 
+            background-color: #f1f5f9; /* PC 배경색 (모바일 프레임 바깥쪽) */
+            word-break: keep-all; /* 한글 단어 끊김 방지 */
+            color: #1e293b; 
+        }
+        
+        /* 웹킷 기반 브라우저 스크롤바 커스텀 */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* 하이라이트 효과 */
+        .hl-yellow { background-color: #fef3c7; color: #92400e; font-weight: 800; padding: 2px 6px; border-radius: 4px; }
+        .ul-indigo { text-decoration: underline; text-decoration-color: #6366f1; text-decoration-thickness: 3px; text-underline-offset: 4px; font-weight: 900; }
+        
+        /* 모바일 뷰 고정 폭 컨테이너 */
+        .mobile-container {
+            width: 100%;
+            max-width: 440px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="mobile-container flex flex-col pb-36">
+        
+        <!-- ==========================================
+             1. HEADER (상단 고정)
+        =========================================== -->
+        <header class="sticky top-0 left-0 w-full p-4 flex items-center justify-between z-50 bg-white/95 backdrop-blur-sm border-b border-slate-200 shadow-sm">
+            <div class="flex items-center gap-2.5">
+                <div class="bg-indigo-600 text-white font-black text-sm px-3 py-1.5 rounded-md shadow-inner shrink-0 leading-none">
+                    SBR
+                </div>
+                <span class="font-black text-base text-slate-900 tracking-tight">SBR부동산</span>
+            </div>
+            <div class="text-xs font-black text-white bg-rose-500 px-3 py-1.5 rounded shadow-sm tracking-widest leading-none">사전안내</div>
+        </header>
+
+        <!-- ==========================================
+             2. HERO / INTRO (다크 테마 + 신뢰감 강조)
+        =========================================== -->
+        <section class="bg-customDark text-white px-6 pt-12 pb-14 relative overflow-hidden">
+            <!-- 배경 데코 -->
+            <div class="absolute top-0 right-0 -mr-16 -mt-16 text-indigo-900/30 text-[160px] pointer-events-none"><i class="fa-solid fa-gavel"></i></div>
+            
+            <div class="relative z-10">
+                <div class="inline-flex items-center gap-1.5 bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 text-[11px] sm:text-xs font-black px-3.5 py-2 rounded-full mb-6 tracking-wide">
+                    <i class="fa-solid fa-check-circle text-sm"></i> 수원지방법원 등록 매수신청대리 컨설팅 (2억원 사고공제 가입)
+                </div>
+                
+                <h1 class="text-[32px] font-black text-white leading-[1.35] tracking-tight mb-5 break-keep">
+                    경매사건물건 상담 및<br>
+                    <span class="text-indigo-400 border-b-2 border-indigo-400 pb-1">진행방법 사전안내</span>
+                </h1>
+                
+                <p class="text-[17px] text-slate-200 mb-10 font-medium leading-[1.6]">
+                    아래 상담진행방법과 보수를 확인 하시고, 매수신청대리 상담과 함께 
+                    <span class="text-yellow-400 font-black text-[22px] underline decoration-yellow-500/60 decoration-4 underline-offset-4 inline-block mt-2 mb-3">의뢰를 희망하시면 연락주세요.</span><br>
+                    <span class="text-white font-bold">빠르게 상담예약 도와드리겠습니다.</span>
+                </p>
+
+                <!-- 독점 정보 강조 (시각적 분리) -->
+                <div class="bg-slate-800/90 p-6 rounded-2xl border border-rose-900/50 shadow-inner relative">
+                    <div class="absolute -top-3 -right-2 bg-rose-500 text-white text-xs font-black px-3 py-1.5 rounded-full shadow-lg transform rotate-3 z-10">필독</div>
+                    <p class="text-base text-slate-100 leading-relaxed font-medium">
+                        <i class="fa-solid fa-triangle-exclamation text-rose-400 mr-2 text-lg"></i> 
+                        경매특성상 정보력에 따른 경쟁입찰이기에 중요한 정보는 
+                        <mark class="bg-rose-500/20 text-rose-200 px-2 py-0.5 rounded font-bold border border-rose-500/30 inline-block mt-2">계약의뢰 조건부로 딱 한분에게만</mark><br>
+                        오픈되는 점 양해 부탁드립니다. (일반 문의상담은 어렵습니다.)
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             3. PROCEDURE (타임라인 레이아웃)
+        =========================================== -->
+        <section class="px-6 py-14 bg-slate-50 border-b border-slate-200">
+            <div class="flex items-center gap-2 mb-2">
+                <i class="fa-solid fa-route text-indigo-600 text-2xl"></i>
+                <h2 class="text-[26px] font-black text-slate-900 tracking-tight">상담 및 진행방법</h2>
+            </div>
+            <p class="text-slate-600 text-base font-bold mb-10">진행순서, 조건과 방법, 비용(보수 등)</p>
+
+            <!-- 타임라인 -->
+            <div class="relative border-l-[3px] border-indigo-200 ml-5 space-y-10 pb-4">
+                
+                <!-- Step 1 -->
+                <div class="relative pl-8">
+                    <div class="absolute -left-[19px] bg-white border-[3px] border-indigo-500 text-indigo-600 font-black w-9 h-9 rounded-full flex items-center justify-center text-base shadow-sm">1</div>
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-black text-lg text-slate-900">상담예약 및 의뢰결정</h3>
+                            <span class="bg-slate-100 text-slate-600 text-xs px-2.5 py-1 rounded font-bold">비용: 없음</span>
+                        </div>
+                        <p class="text-sm text-slate-600 font-medium leading-relaxed">본 안내문자 수신 후 아래 카카오비즈니스톡 및 전화 상담예약 유선 또는 문자 회신</p>
+                    </div>
+                </div>
+
+                <!-- Step 2 (핵심 정보 강조) -->
+                <div class="relative pl-8">
+                    <div class="absolute -left-[19px] bg-indigo-600 border-[3px] border-indigo-600 text-white font-black w-9 h-9 rounded-full flex items-center justify-center text-base shadow-md">2</div>
+                    <div class="bg-indigo-50 p-5 rounded-xl border-2 border-indigo-200 shadow-sm">
+                        <h3 class="font-black text-lg text-indigo-900 mb-1.5">1:1 맞춤 상담</h3>
+                        <p class="text-sm text-indigo-800 font-medium leading-relaxed mb-4">경매사건 물건상담 및 위임계약안내 후 계약진행 여부 확정</p>
+                        <div class="bg-white px-4 py-3.5 rounded-xl border border-indigo-100 flex items-start gap-3 shadow-sm">
+                            <div class="bg-indigo-100 w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                                <i class="fa-solid fa-won-sign text-indigo-600 text-sm"></i>
+                            </div>
+                            <div>
+                                <p class="text-base font-black text-slate-900">상담료 10만원 선납</p>
+                                <p class="text-[13px] text-slate-500 font-bold mt-1">* 1:1 맞춤 상담예약시 선납</p>
+                                <p class="text-[13px] text-slate-500 font-bold mt-1">* 계약성사시, 보수에서 차감</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative pl-8">
+                    <div class="absolute -left-[19px] bg-white border-[3px] border-indigo-500 text-indigo-600 font-black w-9 h-9 rounded-full flex items-center justify-center text-base shadow-sm">3</div>
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 class="font-black text-lg text-slate-900 mb-1.5">계약서 작성</h3>
+                        <p class="text-sm text-slate-600 font-medium leading-relaxed">용역수행범위 및 보수확인 후 계약서 작성(비대면 작성 가능)</p>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="relative pl-8">
+                    <div class="absolute -left-[19px] bg-slate-800 border-[3px] border-slate-800 text-white font-black w-9 h-9 rounded-full flex items-center justify-center text-sm shadow-sm"><i class="fa-solid fa-flag-checkered"></i></div>
+                    <h3 class="font-black text-lg text-slate-900 pt-1.5">매수신청대리 용역 수행</h3>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==========================================
+             4. NOTICES (체크리스트)
+        =========================================== -->
+        <section class="px-6 py-12 bg-white">
+            <div class="inline-flex items-center bg-slate-100 text-slate-700 px-4 py-2 rounded-lg font-black text-base mb-8 border border-slate-200">
+                <i class="fa-solid fa-list-check mr-2 text-indigo-500 text-lg"></i> 미리 참고사항
+            </div>
+            
+            <div class="space-y-5 mb-10">
+                <div class="flex items-start gap-3">
+                    <i class="fa-solid fa-check text-emerald-500 mt-1 text-xl shrink-0"></i>
+                    <p class="text-base text-slate-800 leading-relaxed font-medium">
+                        모든 1:1상담은 <span class="ul-indigo font-bold text-slate-900">사전 예약 및 상담료 선납 후에</span> 전화 또는 사무실 방문 상담 가능합니다.
+                    </p>
+                </div>
+                <div class="flex items-start gap-3">
+                    <i class="fa-solid fa-check text-emerald-500 mt-1 text-xl shrink-0"></i>
+                    <p class="text-base text-slate-800 leading-relaxed font-medium">
+                        모든 1:1상담 및 용역진행중 미팅은 <span class="ul-indigo font-bold text-slate-900">주중 19시 이후 또는 주말 공휴일</span>에도 가능합니다.
+                    </p>
+                </div>
+                <div class="flex items-start gap-3">
+                    <i class="fa-solid fa-check text-emerald-500 mt-1 text-xl shrink-0"></i>
+                    <p class="text-base text-slate-800 leading-relaxed font-medium">
+                        계약서 작성은 시간·장소의 제약으로 방문이 어려운 분을 위해 <span class="ul-indigo font-bold text-slate-900">비방문(우편)</span>으로도 진행 가능합니다.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 용역 범위 명확화 -->
+            <div class="bg-indigo-50 p-6 rounded-2xl border border-indigo-100 relative shadow-sm">
+                <h4 class="font-black text-base text-indigo-950 mb-3.5 flex items-center">
+                    <div class="w-7 h-7 rounded-full bg-indigo-200 text-indigo-700 flex items-center justify-center mr-2.5">
+                        <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                    </div>
+                    매수신청대리 용역 범위
+                </h4>
+                <p class="text-[15px] text-slate-700 leading-relaxed font-bold break-keep">
+                    사건물건분석, 권리분석(공법분석), 입찰가산정, 입찰대리(입찰서류준비 및 입찰), 낙찰후 명도조언(완료시까지)
+                </p>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             5. COST (비용 계산 시각화)
+        =========================================== -->
+        <section class="px-6 py-14 bg-slate-800 text-white border-t border-slate-700">
+            <div class="flex items-center gap-2.5 mb-2">
+                <div class="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center border border-indigo-500/30">
+                    <i class="fa-solid fa-calculator text-indigo-400 text-lg"></i>
+                </div>
+                <h2 class="text-[26px] font-black text-white tracking-tight">매수신청대리 등 보수 안내</h2>
+            </div>
+            
+            <!-- 총 비용 구성 명확화 공식 박스 추가 -->
+            <div class="bg-slate-900/80 border border-indigo-500/40 p-5 rounded-xl mb-10 mt-6 text-center shadow-lg">
+                <p class="text-indigo-300 text-[15px] font-black mb-3"><i class="fa-solid fa-coins mr-1"></i> 총 용역비용 구성</p>
+                <div class="flex flex-wrap items-center justify-center gap-2 text-[17px] font-black text-white">
+                    <span class="bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-600">기본보수</span>
+                    <i class="fa-solid fa-plus text-indigo-400 text-sm"></i>
+                    <span class="bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-600">성공보수</span>
+                    <i class="fa-solid fa-plus text-indigo-400 text-sm"></i>
+                    <span class="bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-600">실비<span class="text-sm font-medium text-slate-400 ml-1">(사전승인)</span></span>
+                </div>
+            </div>
+            
+            <div class="space-y-6">
+                <!-- Box 1: 비용 계산 과정 명확화 -->
+                <div class="bg-slate-900 p-7 rounded-2xl shadow-xl border border-slate-700">
+                    <h3 class="font-black text-lg text-indigo-300 mb-6 flex items-center">
+                        <span class="bg-indigo-900 text-indigo-200 w-6 h-6 rounded flex items-center justify-center text-sm mr-2.5">1</span> 
+                        기본보수
+                        <span class="text-[15px] text-slate-500 font-normal ml-2 tracking-tight">(매수신청대리)</span>
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between text-[17px] text-slate-300 font-medium">
+                            <span>보수 금액</span>
+                            <span class="font-bold">40~50만</span>
+                        </div>
+                        <div class="flex items-center justify-between text-[16px] border-b border-slate-700 pb-5">
+                            <span class="text-slate-500">- 상담료 선납</span>
+                            <span class="text-rose-400 font-bold">- 10만</span>
+                        </div>
+                        <div class="flex items-center justify-between pt-3">
+                            <span class="font-black text-slate-200 text-lg">결제액</span>
+                            <div class="inline-flex items-baseline bg-slate-800 px-5 py-2.5 rounded-xl border border-slate-600 shadow-inner">
+                                <span class="font-black text-indigo-400 text-3xl leading-none tracking-tight">30~40</span>
+                                <span class="text-base text-slate-300 font-bold ml-1.5">만</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Box 2: 성공 보수 -->
+                <div class="bg-slate-900 p-7 rounded-2xl shadow-xl border border-indigo-500/40 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-indigo-600 text-white text-xs font-black px-4 py-2 rounded-bl-lg tracking-widest shadow-md">SUCCESS</div>
+                    
+                    <h3 class="font-black text-lg text-indigo-300 mb-5 flex items-center">
+                        <span class="bg-indigo-900 text-indigo-200 w-6 h-6 rounded flex items-center justify-center text-sm mr-2.5">2</span>
+                        성공보수 
+                        <span class="text-[15px] text-slate-500 font-normal ml-2 tracking-tight">(낙찰 시)</span>
+                    </h3>
+                    
+                    <p class="text-[17px] font-bold text-slate-200 leading-relaxed mb-6">
+                        낙찰가의 <span class="text-emerald-400 text-2xl mx-1">1.5%</span> 또는<br>
+                        감정가의 <span class="text-emerald-400 text-2xl mx-1">1%</span> 중 <span class="text-white underline decoration-emerald-500 decoration-4 underline-offset-4 text-xl">낮은 금액</span>
+                    </p>
+                    
+                    <div class="bg-slate-800 p-5 rounded-xl border border-slate-700 flex items-start gap-3">
+                        <i class="fa-solid fa-lightbulb text-yellow-500 mt-1 text-base"></i>
+                        <p class="text-[15px] text-slate-300 font-medium leading-relaxed">
+                            예) 1억에 낙찰받은 경우, 성공보수 150만원<br>
+                            <span class="text-indigo-300 text-sm">* 낙찰 후 무료 명도조언 포함</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Box 3: 실비 안내 추가 -->
+                <div class="bg-slate-900 p-5 rounded-2xl shadow-xl border border-slate-700 flex items-center gap-4">
+                     <span class="bg-slate-800 text-slate-400 w-6 h-6 rounded flex items-center justify-center text-sm shrink-0 border border-slate-600">3</span>
+                     <div>
+                        <h3 class="font-black text-[17px] text-slate-200">실비 <span class="text-slate-500 text-[15px] ml-1 font-medium">(임장 교통비 등)</span></h3>
+                        <p class="text-[15px] text-slate-400 mt-1.5 font-medium leading-snug">반드시 <span class="text-rose-400 font-bold underline decoration-rose-500/50 underline-offset-2">의뢰인의 사전 승인</span> 하에 별도 청구됩니다.</p>
+                     </div>
+                </div>
+            </div>
+
+            <p class="text-[15px] text-slate-400 mt-10 text-center font-medium leading-relaxed bg-slate-900/50 p-4 rounded-xl border border-slate-700/50">
+                * 용역비용은 물건의 특성(임장 소재지)과 난이도(농취증, 특수물건 확인작업 등)에 따라 협의 후 변동이 될 수 있습니다.
+            </p>
+        </section>
+
+        <!-- ==========================================
+             6. WARNING & RESTRICTION
+        =========================================== -->
+        <section class="px-6 py-16 bg-amber-50 text-center border-t-[8px] border-amber-400 relative">
+            <div class="mt-2 mb-8 relative inline-block">
+                <div class="absolute inset-0 bg-amber-200 rounded-full blur-md opacity-60 scale-125"></div>
+                <div class="relative w-20 h-20 bg-white text-amber-600 rounded-full flex items-center justify-center border-4 border-amber-300 shadow-md">
+                    <i class="fa-solid fa-triangle-exclamation text-4xl"></i>
+                </div>
+            </div>
+
+            <h2 class="text-[26px] font-black text-amber-950 mb-5 leading-tight tracking-tight">동일 사건 물건번호<br>의뢰 제한 안내</h2>
+            
+            <div class="bg-white p-7 rounded-2xl border border-amber-200 shadow-md w-full mb-4 relative overflow-hidden text-left">
+                <div class="absolute top-0 left-0 w-full h-1.5 bg-amber-300"></div>
+                <p class="text-[17px] text-amber-900 leading-[1.7] font-bold break-keep text-center">
+                    동일한 사건 물건번호에 대해서는<br>
+                    <span class="text-rose-600 bg-rose-50 px-2 py-1 rounded-lg underline decoration-rose-300 decoration-4 underline-offset-4 mt-2 inline-block mb-2 text-lg">먼저 의뢰주신 계약자가 있는 경우</span><br>
+                    용역 진행이 어려운 점 깊은 양해 부탁드립니다.
+                </p>
+            </div>
+        </section>
+        
+        <!-- 하단 여백 확보 (플로팅 버튼 위함) -->
+        <div class="pb-6 bg-amber-50"></div>
+
+        <!-- ==========================================
+             7. FLOATING CTA (상담예약 하단 고정)
+        =========================================== -->
+        <div class="fixed bottom-0 left-0 w-full z-50 flex justify-center pointer-events-none">
+            <!-- 모바일 컨테이너 폭과 동일하게 매칭 -->
+            <div class="w-full max-w-[440px] bg-white border-t border-slate-200 p-4 shadow-[0_-10px_20px_-5px_rgba(0,0,0,0.1)] flex flex-col gap-3 pointer-events-auto rounded-t-2xl">
+                
+                <!-- 카카오톡 채널 상담 -->
+                <a href="http://pf.kakao.com/_jdxkDn/chat" target="_blank" class="w-full bg-[#FAE100] hover:bg-[#F4DC00] text-[#371D1E] font-black text-lg py-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2.5 border border-yellow-400">
+                    <i class="fa-solid fa-comment text-[#371D1E] text-2xl"></i> 카카오톡 상담 예약하기
+                </a>
+                
+                <!-- 전화 상담 -->
+                <a href="tel:010-4893-0365" class="w-full bg-customDark hover:bg-slate-800 text-white font-black text-lg py-4 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2.5 border border-slate-700">
+                    <i class="fa-solid fa-phone-volume text-indigo-400 text-xl"></i> 
+                    전화상담 
+                    <span class="text-indigo-300 ml-1 tracking-wider text-xl">010-4893-0365</span>
+                </a>
+
+                <p class="text-xs text-slate-500 text-center font-bold tracking-wide mt-1.5">© SBR부동산 법원경매 매수신청대리</p>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
